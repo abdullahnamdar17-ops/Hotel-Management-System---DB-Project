@@ -1,0 +1,8 @@
+# Local credentials
+.streamlit/secrets.toml
+.env
+
+# Python and OS-generated files
+__pycache__/
+*.pyc
+.DS_Store
