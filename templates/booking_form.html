@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% from 'macros.html' import token,field,select with context %}
+{% block content %}<section class="panel form-panel"><h2>Create a reservation</h2><p class="intro">Choose a guest, property, and stay dates. Room assignment is optional.</p>
+{% if guests and hotels %}<form method="post" data-booking-form>{{ token() }}<div class="form-grid">
+<div class="field"><label for="guest_id">Guest *</label><select name="guest_id" id="guest_id" required>{% for guest in guests %}<option value="{{ guest.guest_id }}">#{{ guest.guest_id }} · {{ guest.first_name }} {{ guest.last_name }}</option>{% endfor %}</select></div>
+<div class="field"><label for="hotel_id">Hotel *</label><select name="hotel_id" id="hotel_id" required>{% for hotel in hotels %}<option value="{{ hotel.hotel_id }}">#{{ hotel.hotel_id }} · {{ hotel.hotel_name }}</option>{% endfor %}</select></div>
+{{ field('check_in_date','Check-in','date',default_check_in) }}{{ field('check_out_date','Check-out','date',default_check_out) }}
+{{ field('booking_date','Booking date','date',today) }}{{ select('booking_status','Status',booking_statuses,'reserved') }}
+</div><h2>Room & rate</h2><p class="muted">Only rooms from the selected hotel can be assigned. Availability is checked for the stay dates when you save.</p><div class="form-grid">
+<div class="field"><label for="room_id">Room (optional)</label><select name="room_id" id="room_id"><option value="0">Assign later</option>{% for room in rooms %}<option value="{{ room.room_id }}" data-hotel="{{ room.hotel_id }}" data-price="{{ room.base_price }}">{{ room.hotel_name }} · Room {{ room.room_number }} · {{ room.type_name }}</option>{% endfor %}</select></div>
+{{ field('nightly_rate','Agreed nightly rate ($)','number','100.00',required=false,min='0.01',max='99999999.99',step='0.01') }}</div><div class="form-actions"><button>Create booking</button><a class="button secondary" href="{{ url_for('bookings') }}">Cancel</a></div></form>
+{% else %}<div class="notice">Create a <a href="{{ url_for('hotels') }}">hotel</a> and a <a href="{{ url_for('guests_new') }}">guest</a> before adding a booking.</div>{% endif %}</section>{% endblock %}

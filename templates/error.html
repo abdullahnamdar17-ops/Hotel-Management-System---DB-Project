@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<section class="panel message-panel"><h2>{{ title }}</h2><p role="alert">{{ message }}</p><a class="button secondary" href="{{ request.path if request.method == 'POST' and request.path != '/logout' else url_for('home') }}">{{ 'Return to form' if request.method == 'POST' else 'Return to overview' }}</a></section>{% endblock %}

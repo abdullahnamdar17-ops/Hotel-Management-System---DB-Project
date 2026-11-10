@@ -1,25 +1,5 @@
-CREATE DATABASE IF NOT EXISTS hotel_management_system;
-USE hotel_management_system;
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS payments;
-DROP TABLE IF EXISTS booking_rooms;
-DROP TABLE IF EXISTS bookings;
-DROP TABLE IF EXISTS rooms;
-DROP TABLE IF EXISTS room_types;
-DROP TABLE IF EXISTS staff;
-DROP TABLE IF EXISTS staff_roles;
-DROP TABLE IF EXISTS guests;
-DROP TABLE IF EXISTS persons;
-DROP TABLE IF EXISTS hotels;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- =====================================================
--- HOTELS
--- =====================================================
+-- Run once in a NEW, empty MySQL 8+ database selected by your provider.
+-- This creates the original application tables without dropping existing tables.
 
 CREATE TABLE hotels (
     hotel_id        INT AUTO_INCREMENT,

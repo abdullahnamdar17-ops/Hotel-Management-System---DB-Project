@@ -1,0 +1,17 @@
+.git
+.env
+.env.*
+.streamlit/secrets.toml
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+*.pdf
+tests
+schema.mysql.sql
+schema.tidb.sql
+manage.py
+SETUP.md
+README.md
+VALIDATION.md

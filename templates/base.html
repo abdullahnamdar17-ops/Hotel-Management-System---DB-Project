@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <title>{{ title }} · Hotel Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body class="{{ 'signed-out' if not authenticated else '' }}">
+<a class="skip-link" href="#main">Skip to content</a>
+{% if authenticated %}
+<aside class="sidebar">
+  <a class="brand" href="{{ url_for('home') }}"><span class="brand-icon">H</span><span>Hotel<br><small>MANAGEMENT SYSTEM</small></span></a>
+  <p class="nav-label">WORKSPACE</p>
+  <nav aria-label="Main navigation">
+  {% for endpoint, label, icon in navigation %}
+    <a href="{{ url_for(endpoint) }}" class="{{ 'active' if request.endpoint == endpoint else '' }}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}>
+      <span class="nav-icon" aria-hidden="true">{{ icon }}</span>{{ label }}
+    </a>
+  {% endfor %}
+  </nav>
+  <div class="sidebar-bottom">Property & guest operations
+  {% if login_enabled %}<form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="sign-out">Sign out ↗</button></form>{% endif %}
+  </div>
+</aside>
+{% endif %}
+<main id="main" class="main">
+  <header class="page-header"><div><p class="eyebrow">PROPERTY OPERATIONS</p><h1>{{ title }}</h1></div><span class="date">{{ today.strftime('%d %b %Y') }}</span></header>
+  {% for category, message in get_flashed_messages(with_categories=true) %}<div class="notice {{ category }}" role="status">{{ message }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+  <footer>Hotel Management System <span>Manage every stay with care.</span></footer>
+</main>
+</body>
+</html>
