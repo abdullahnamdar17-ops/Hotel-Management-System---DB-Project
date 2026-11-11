@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% from 'macros.html' import token,field,select with context %}
+{% block content %}<section class="panel form-panel"><p class="intro">Keep your guest's contact details and loyalty profile together. Fields marked * are required.</p>
+<form method="post">{{ token() }}<h2>Personal details</h2><div class="form-grid">
+{{ field('first_name','First name',value=guest.get('first_name',''),maxlength=50) }}
+{{ field('last_name','Last name',value=guest.get('last_name',''),maxlength=50) }}
+{{ field('email','Email','email',guest.get('email',''),maxlength=100) }}
+{{ field('phone','Phone','tel',guest.get('phone',''),maxlength=20) }}
+{{ field('age','Age','number',guest.get('age',25),min=18,max=120,step=1) }}
+</div><h2>Address</h2><div class="form-grid">
+{{ field('street_address','Street address',value=guest.get('street_address',''),maxlength=150) }}
+{{ field('city','City',value=guest.get('city',''),maxlength=80) }}
+{{ field('state_province','State / province',value=guest.get('state_province',''),maxlength=80) }}
+{{ field('zip_code','ZIP / postal code',value=guest.get('zip_code',''),maxlength=20) }}
+</div><h2>Guest profile</h2><div class="form-grid">
+{{ select('guest_status','Status',guest_statuses,guest.get('guest_status','active')) }}
+{{ select('loyalty_level','Loyalty level',loyalty_levels,guest.get('loyalty_level','none')) }}
+</div><div class="form-actions"><button>{{ 'Save changes' if guest else 'Add guest' }}</button><a class="button secondary" href="{{ url_for('guests') }}">Cancel</a></div></form></section>{% endblock %}

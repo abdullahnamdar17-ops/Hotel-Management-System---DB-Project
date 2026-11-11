@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% from 'macros.html' import badge,empty with context %}
+{% block content %}
+<section class="welcome"><div><p class="eyebrow">WELCOME TO YOUR WORKSPACE</p><h2>A clear view of every stay.</h2><p>Manage your properties, look after your guests, and keep daily operations moving.</p><a class="button gold" href="{{ url_for('bookings_new') }}">+ New booking</a></div><div class="welcome-mark" aria-hidden="true">H<span>EST. FOR BETTER STAYS</span></div></section>
+<div class="stats">
+<div class="stat"><span>Occupancy</span><strong>{{ '%.0f'|format(occupancy) }}%</strong><small>{{ stats.occupied_rooms }} of {{ stats.rooms }} rooms occupied</small></div>
+<div class="stat"><span>Available rooms</span><strong>{{ stats.available_rooms }}</strong><small>{{ stats.hotels }} properties</small></div>
+<div class="stat"><span>Active reservations</span><strong>{{ stats.active_bookings }}</strong><small>{{ stats.guests }} registered guests</small></div>
+<div class="stat"><span>Paid revenue</span><strong class="revenue-stat">{{ stats.paid_revenue|currency }}</strong><small>All paid transactions</small></div>
+</div>
+<section class="panel"><div class="section-heading"><div><p class="eyebrow">RESERVATIONS</p><h2>Upcoming stays</h2></div><a href="{{ url_for('bookings') }}">View all bookings →</a></div>
+{% if upcoming %}<div class="table-scroll"><table><thead><tr><th>Booking</th><th>Guest</th><th>Hotel</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead><tbody>
+{% for row in upcoming %}<tr><td>#{{ row.booking_id }}</td><td><strong>{{ row.first_name }} {{ row.last_name }}</strong></td><td>{{ row.hotel_name }}</td><td>{{ row.check_in_date }}</td><td>{{ row.check_out_date }}</td><td>{{ badge(row.booking_status) }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}{{ empty('No upcoming stays are recorded yet.') }}{% endif %}</section>
+<div class="two-panels dashboard-breakdowns">
+{% for heading,breakdown in [('Room status',room_breakdown),('Reservations by status',booking_breakdown)] %}
+<section class="panel"><h2>{{ heading }}</h2>{% if breakdown %}<div class="status-chart" role="list" aria-label="{{ heading }}">
+{% for row in breakdown %}<div class="status-chart-row" role="listitem"><span>{{ row.status|replace('_',' ')|title }}</span><div class="status-chart-track" aria-hidden="true"><div class="status-chart-bar" style="width:{{ row.width }}%"></div></div><strong>{{ row.count }}</strong></div>{% endfor %}
+</div>{% else %}{{ empty('No records to show yet.') }}{% endif %}</section>
+{% endfor %}</div>
+<section class="panel"><div class="section-heading"><div><p class="eyebrow">PERFORMANCE</p><h2>Monthly paid revenue</h2></div><span class="muted">Last six months</span></div>
+{% if revenue|selectattr('amount')|list %}<div class="table-scroll"><div class="revenue-chart" role="list" aria-label="Monthly paid revenue">
+{% for month in revenue %}<div class="revenue-column" role="listitem"><strong>{{ month.amount|currency }}</strong><div class="revenue-track" aria-hidden="true"><div class="revenue-bar" style="height:{{ month.height }}%"></div></div><span>{{ month.label }}</span></div>{% endfor %}
+</div></div>{% else %}{{ empty('Paid transactions from the last six months will appear here.') }}{% endif %}</section>
+<h2 class="section-title">Keep things moving</h2><div class="quick-links">
+{% for endpoint,label,description in [('guests_new','Register a guest','Keep contact details in one place.'),('rooms','Check your rooms','Review availability and room status.'),('payments','Record a payment','Track payments against every booking.')] %}<a class="quick-link" href="{{ url_for(endpoint) }}"><span>↗</span><h3>{{ label }}</h3><p>{{ description }}</p></a>{% endfor %}</div>
+{% endblock %}

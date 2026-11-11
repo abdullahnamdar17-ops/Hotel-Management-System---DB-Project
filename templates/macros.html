@@ -1,0 +1,22 @@
+{% macro token() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro field(name, label, type='text', value='', required=true, min='', max='', step='', maxlength=none, placeholder='', field_id=none) %}
+<div class="field"><label for="{{ field_id or name }}">{{ label }}{% if required %}<span aria-hidden="true"> *</span>{% endif %}</label>
+<input id="{{ field_id or name }}" name="{{ name }}" type="{{ type }}" value="{{ value }}" {% if required %}required{% endif %} {% if min != '' %}min="{{ min }}"{% endif %} {% if max != '' %}max="{{ max }}"{% endif %} {% if step %}step="{{ step }}"{% endif %} {% if maxlength %}maxlength="{{ maxlength }}"{% endif %} {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}></div>
+{% endmacro %}
+
+{% macro select(name, label, options, selected='', all_label=none, field_id=none) %}
+<div class="field"><label for="{{ field_id or name }}">{{ label }}</label><select id="{{ field_id or name }}" name="{{ name }}">
+{% if all_label is not none %}<option value="">{{ all_label }}</option>{% endif %}
+{% for option in options %}<option value="{{ option }}" {% if option|string == selected|string %}selected{% endif %}>{{ option|replace('_',' ')|title }}</option>{% endfor %}
+</select></div>
+{% endmacro %}
+
+{% macro pagination(pager) %}
+<div class="pagination"><span>{{ pager.total }} record{{ '' if pager.total == 1 else 's' }} · Page {{ pager.page }} of {{ pager.pages }}</span>
+<div>{% if pager.page > 1 %}<a class="button secondary small" href="{{ pager.previous }}">← Previous</a>{% endif %}
+{% if pager.page < pager.pages %}<a class="button secondary small" href="{{ pager.following }}">Next →</a>{% endif %}</div></div>
+{% endmacro %}
+
+{% macro badge(value) %}<span class="badge {{ value }}">{{ value|replace('_',' ')|title }}</span>{% endmacro %}
+{% macro empty(message) %}<div class="empty"><span aria-hidden="true">◇</span><p>{{ message }}</p></div>{% endmacro %}

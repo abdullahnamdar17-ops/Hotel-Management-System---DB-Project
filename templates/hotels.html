@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% from 'macros.html' import token,field,pagination,empty with context %}
+{% block content %}<section class="panel form-panel"><h2>Add a property</h2><p class="intro">Start with the property's address and contact information.</p><form method="post">{{ token() }}<div class="form-grid">
+{{ field('hotel_name','Hotel name',maxlength=100) }}{{ field('contact_phone','Contact phone','tel',maxlength=20) }}
+{{ field('street_address','Street address',maxlength=150) }}{{ field('city','City',maxlength=80) }}
+{{ field('state_province','State / province',maxlength=80) }}{{ field('zip_code','ZIP / postal code',maxlength=20) }}
+{{ field('star_rating','Star rating','number',3,min=1,max=5,step='0.5') }}
+</div><div class="form-actions"><button>+ Add hotel</button></div></form></section>
+<section class="panel"><div class="section-heading"><h2>Your properties</h2></div>{% if rows %}<div class="table-scroll"><table><thead><tr><th>ID</th><th>Property</th><th>Address</th><th>Phone</th><th>Rating</th></tr></thead><tbody>{% for row in rows %}<tr><td>#{{ row.hotel_id }}</td><td><strong>{{ row.hotel_name }}</strong></td><td>{{ row.street_address }}<small>{{ row.city }}, {{ row.state_province }} {{ row.zip_code }}</small></td><td>{{ row.contact_phone }}</td><td>{{ row.star_rating }} ★</td></tr>{% endfor %}</tbody></table></div>{% else %}{{ empty('No properties yet. Add your first hotel above.') }}{% endif %}{{ pagination(pager) }}</section>{% endblock %}
